@@ -63,8 +63,18 @@ public class FrequencyOfLetters {
         }
         //Sort the occurrences
         Collections.sort(result);
+        //Remove repeated occurrences to reach a list of absolutely ascending values
+        for(int i = 0; i < result.size()-1; i++)
+        {
+            if(result.get(i) == result.get(i+1))
+            {
+                result.remove(i);
+                i--;
+            }
+        }
         //Take the maximum
         maxFre = result.get(result.size()-1);
+        result.remove(result.size()-1);
         for(Character a : map.keySet())
         {
             //Show the letters with the maximum occurrence
@@ -72,10 +82,12 @@ public class FrequencyOfLetters {
                 //If space, go for the second maximal occurrence
                 if(a == ' ')
                 {
-                    maxFre = result.get(result.size()-2);
+                    maxFre = result.get(result.size()-1);
+                    result.remove(result.size()-1);
                     continue;
                 }
                 else {
+                    result.remove(result.size()-1);
                     System.out.println("Maximum frequency is " + maxFre + " on letters below:");
                     if ((int) a > 96) {
                         System.out.print((char) (a - 32) + " -> " + map.get(a) + "\n");
@@ -83,6 +95,39 @@ public class FrequencyOfLetters {
                         System.out.print(a + " -> " + map.get(a) + "\n");
                     }
                 }
+            }
+        }
+        while (result.size() != 0)
+        {
+            System.out.println("Do you want to see the next?(Y/N)");
+            String choice = in.next();
+            switch (choice.charAt(0))
+            {
+                case 'N': return;
+                //In this case, the same procedure is followed
+                case 'Y': maxFre = result.get(result.size()-1);
+                result.remove(result.size()-1);
+                for(Character a : map.keySet())
+                {
+                    if(map.get(a) == maxFre) {
+                        if(a == ' ')
+                        {
+                            maxFre = result.get(result.size()-1);
+                            result.remove(result.size()-1);
+                            continue;
+                        }
+                        else {
+                            System.out.println("Maximum frequency is " + maxFre + " on letters below:");
+                            if ((int) a > 96) {
+                                System.out.print((char) (a - 32) + " -> " + map.get(a) + "\n");
+                            } else {
+                                System.out.print(a + " -> " + map.get(a) + "\n");
+                            }
+                        }
+                    }
+                }
+                break;
+                default: return;
             }
         }
     }
